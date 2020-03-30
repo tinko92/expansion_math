@@ -1,9 +1,11 @@
 #include <iostream>
 #include <chrono>
 #include "dynamic_exact.h"
+#include "static_exact.h"
 
 int main() {
 	using A = expansion<double>;
+	using B = float_wrapper<double>;
 	auto x = A(1e100) + A(1e-20) + A(1e-20) + A(1e-40) - A(1e100) - A(2.0) * A(1e-20);
 	std::cout << x.estimate() << "\n"; 
 	//output: 1e-40
@@ -25,21 +27,21 @@ int main() {
 	//precise results
 
 
-	auto det1 = (A(1e-20) - A(1e20)) *
-                   (A(2.0) - A(2e20)) -
-                   (A(2e-20) - A(2e20)) *
-                   (A(1.0 + 1e-10) - A(1e20));
-	auto det2 = (A(1e-20) - A(1e20)) *
-                   (A(2.0) - A(2e20)) -
-                   (A(2e-20) - A(2e20)) *
-                   (A(1.0) - A(1e20));
-	auto det3 = (A(1e-20) - A(1e20)) *
-                   (A(2.0) - A(2e20)) -
-                   (A(2e-20) - A(2e20)) *
-                   (A(1.0 - 1e-10) - A(1e20));
-	std::cout << (det1.estimate() > 0 ? 1 : (det1.estimate() == 0 ? 0 : -1)) << "\n"
-		  << (det2.estimate() > 0 ? 1 : (det2.estimate() == 0 ? 0 : -1)) << "\n"
-		  << (det3.estimate() > 0 ? 1 : (det3.estimate() == 0 ? 0 : -1)) << "\n";
+	auto det1 = ((B(1e-20) + B(-1e20)) *
+                   (B(2.0) + B(-2e20)) +
+                   (B(-2e-20) + B(2e20)) *
+                   (B(1.0 + 1e-10) + B(-1e20))).sign();
+	auto det2 = ((B(1e-20) + B(-1e20)) *
+                   (B(2.0) + B(-2e20)) +
+                   (B(-2e-20) + B(2e20)) *
+                   (B(1.0) + B(-1e20))).sign();
+	auto det3 = ((B(1e-20) + B(-1e20)) *
+                   (B(2.0) + B(-2e20)) +
+                   (B(-2e-20) + B(2e20)) *
+                   (B(1.0 - 1e-10) + B(-1e20))).sign();
+	std::cout << (det1 > 0 ? 1 : (det1 == 0 ? 0 : -1)) << "\n"
+		  << (det2 > 0 ? 1 : (det2 == 0 ? 0 : -1)) << "\n"
+		  << (det3 > 0 ? 1 : (det3 == 0 ? 0 : -1)) << "\n";
 	//output:
 	//1
 	//0

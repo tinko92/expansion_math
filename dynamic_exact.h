@@ -1,3 +1,6 @@
+#ifndef dynamic_exact_once
+#define dynamic_exact_once
+
 #include<vector>
 #include<cmath>
 #include<limits>
@@ -415,3 +418,5 @@ expansion<F> operator-(const expansion<F>& e) {
 		h[i] = -e[i];
         return h;
 }
+
+#endif
