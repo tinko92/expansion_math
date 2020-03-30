@@ -1,7 +1,9 @@
+#ifndef static_exact_once
+#define static_exact_once
+
 #include <array>
 #include <cmath>
 #include <limits>
-#include <iostream>
 #include <cassert>
 #include <numeric>
 #include "dynamic_exact.h"
@@ -23,7 +25,6 @@ public:
 	}
 	F error_bound() { return F(0.0); }
 	static constexpr std::size_t size = 1;
-	//dconst float_type& operator[](std::size_t idx) const { assert(idx == 0); return m_val; }
 	float_type& operator[](std::size_t idx) { assert(idx == 0); return m_val; }
 	float_wrapper(const F& a) : m_val(a) {}
 	float_type estimate() const { return m_val; }
@@ -299,3 +300,4 @@ private:
 	Left m_l;
 	Right m_r;
 };
+#endif
